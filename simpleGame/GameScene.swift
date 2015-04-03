@@ -106,7 +106,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var actionArray: NSMutableArray = NSMutableArray()
         
         actionArray.addObject(SKAction.moveTo(CGPointMake(position, -alien.size.height), duration: NSTimeInterval(duration)))
-        
+        actionArray.addObject(SKAction.runBlock({
+            var transition: SKTransition = SKTransition.flipHorizontalWithDuration(0.5)
+            var gameOverScene: SKScene = GameOverScene(size: self.size, won: false)
+            // set false because alien ship within addAlien method parameter -alien.size.height guarantees that the alien has gone past space ship therefore player loses.
+            self.view?.presentScene(gameOverScene, transition: transition)
+        }))
         actionArray.addObject(SKAction.removeFromParent())
         
         alien.runAction(SKAction.sequence(actionArray))
@@ -114,6 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // why is this important?
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -144,7 +150,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    
+    // created standard spaceship coming from XCode
+/*
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
@@ -162,6 +169,119 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             sprite.runAction(SKAction.repeatActionForever(action))
             
             self.addChild(sprite)
+        }
+    }
+*/
+    // writing mathematical functions to do vector calculations for trajectory of lasers
+    func vecAdd(a: CGPoint, b: CGPoint) -> CGPoint{
+        return CGPointMake(a.x + b.x, a.y + b.y)
+    } // -- what are CGPoints?
+    
+    func vecSub(a: CGPoint, b: CGPoint) -> CGPoint{
+        return CGPointMake(a.x - b.x, a.y - b.y)
+    }
+    
+    func vecMultiply(a: CGPoint, b: CGFloat) -> CGPoint{
+        return CGPointMake(a.x * b, a.y * b)
+    }
+    
+    func vecLength(a:CGPoint) -> CGFloat {
+        return CGFloat(sqrtf(CFloat(a.x) * CFloat(a.x) + (CFloat(a.y) * CFloat(a.y))))
+        // what is the difference between CGFloat and CFloat?
+    }
+
+    func vecNormalize(a: CGPoint) -> CGPoint {
+        var length: CGFloat = vecLength(a)
+        return CGPointMake(a.x/length, a.y/length)
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        self.runAction(SKAction.playSoundFileNamed("torpedo.mp3", waitForCompletion: false))
+        var touch: UITouch = touches.anyObject() as UITouch
+        
+        var location:CGPoint = touch.locationInNode(self)
+        
+        // create sprite node for torpedo
+        var torpedo: SKSpriteNode = SKSpriteNode(imageNamed: "torpedo")
+        torpedo.position = player.position
+        
+        torpedo.physicsBody = SKPhysicsBody(circleOfRadius: torpedo.size.width/2)
+        torpedo.physicsBody?.dynamic = true
+        torpedo.physicsBody?.categoryBitMask = photonTorpedoCategory
+        torpedo.physicsBody?.contactTestBitMask = alienCategory
+        torpedo.physicsBody?.collisionBitMask = 0
+        
+        // what does this do?
+        torpedo.physicsBody?.usesPreciseCollisionDetection = true
+        
+        // math calculation start with offset, begin with spaceship between alien, point where we touched on the screen
+        
+        var offset:CGPoint = vecSub(location, b: torpedo.position)
+        
+        // won't add torpedo if touch somewhere below spaceship
+        if(offset.y < 0) {
+            return
+        }
+        
+        self.addChild(torpedo)
+        
+        var direction: CGPoint = vecNormalize(offset)
+        
+        // now define length of vec to determine how far torpedo goes once fired
+        // 1000 is a fixed length we know will be off our screen, maybe I can use screen size for this parameter?
+        var shotLength: CGPoint = vecMultiply(direction, b: 1000)
+        
+        var finalDestination: CGPoint = vecAdd(shotLength, b: torpedo.position)
+        
+        // velocity
+        let velocity = 568/1
+        let moveDuration: Float = Float(self.size.width) / (Float(velocity))
+        
+        
+        var actionArray:NSMutableArray = NSMutableArray()
+        actionArray.addObject((SKAction.moveTo(finalDestination, duration: NSTimeInterval(moveDuration))))
+        
+        actionArray.addObject(SKAction.removeFromParent())
+        
+        torpedo.runAction(SKAction.sequence(actionArray))
+        
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        
+        if(contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask) {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        }
+        
+        else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if((firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0) {
+            torpedoDidCollideWithAlien(firstBody.node as SKSpriteNode, alien: secondBody.node as SKSpriteNode)
+            // now our collision test should be working
+            
+        }
+    }
+    
+    func torpedoDidCollideWithAlien(torpedo: SKSpriteNode, alien: SKSpriteNode) {
+        println("HIT")
+        torpedo.removeFromParent()
+        alien.removeFromParent()
+        
+        aliensDestroyed++
+        
+        if(aliensDestroyed > 10) {
+            // transition to GameOver or Success
+            // use contact delegate
+            var transition: SKTransition = SKTransition.flipHorizontalWithDuration(0.5)
+            var gameOverScene: SKScene = GameOverScene(size: self.size, won: true)
+            // set false because alien ship within addAlien method parameter -alien.size.height guarantees that the alien has gone past space ship therefore player loses.
+            self.view?.presentScene(gameOverScene, transition: transition)
         }
     }
 }

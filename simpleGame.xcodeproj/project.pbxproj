@@ -21,6 +21,7 @@
 		F488AFCB1ACC821400A6F730 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F488AFCA1ACC821400A6F730 /* Images.xcassets */; };
 		F488AFCE1ACC821400A6F730 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F488AFCC1ACC821400A6F730 /* LaunchScreen.xib */; };
 		F488AFDA1ACC821400A6F730 /* simpleGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F488AFD91ACC821400A6F730 /* simpleGameTests.swift */; };
+		F4B4E8A41ACF54870033DB97 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B4E8A31ACF54870033DB97 /* GameOverScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		F488AFD31ACC821400A6F730 /* simpleGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = simpleGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F488AFD81ACC821400A6F730 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F488AFD91ACC821400A6F730 /* simpleGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = simpleGameTests.swift; sourceTree = "<group>"; };
+		F4B4E8A31ACF54870033DB97 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				F488AFBF1ACC821400A6F730 /* AppDelegate.swift */,
 				F488AFC11ACC821400A6F730 /* GameScene.sks */,
 				F488AFC31ACC821400A6F730 /* GameScene.swift */,
+				F4B4E8A31ACF54870033DB97 /* GameOverScene.swift */,
 				F488AFC51ACC821400A6F730 /* GameViewController.swift */,
 				F4169C331ACE1405003F9061 /* sounds */,
 				F4169C2C1ACE13C6003F9061 /* sprites.atlas */,
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4B4E8A41ACF54870033DB97 /* GameOverScene.swift in Sources */,
 				F488AFC41ACC821400A6F730 /* GameScene.swift in Sources */,
 				F488AFC61ACC821400A6F730 /* GameViewController.swift in Sources */,
 				F4169C2B1ACE132E003F9061 /* README.md in Sources */,
