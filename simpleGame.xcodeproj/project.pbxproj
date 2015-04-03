@@ -11,6 +11,8 @@
 		F4169C301ACE13EC003F9061 /* alien@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4169C2D1ACE13EC003F9061 /* alien@2x.png */; };
 		F4169C311ACE13EC003F9061 /* shuttle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4169C2E1ACE13EC003F9061 /* shuttle@2x.png */; };
 		F4169C321ACE13EC003F9061 /* torpedo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4169C2F1ACE13EC003F9061 /* torpedo@2x.png */; };
+		F4169C361ACE1415003F9061 /* bgmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4169C341ACE1415003F9061 /* bgmusic.mp3 */; };
+		F4169C371ACE1415003F9061 /* torpedo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4169C351ACE1415003F9061 /* torpedo.mp3 */; };
 		F488AFC01ACC821400A6F730 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F488AFBF1ACC821400A6F730 /* AppDelegate.swift */; };
 		F488AFC21ACC821400A6F730 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F488AFC11ACC821400A6F730 /* GameScene.sks */; };
 		F488AFC41ACC821400A6F730 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F488AFC31ACC821400A6F730 /* GameScene.swift */; };
@@ -36,6 +38,8 @@
 		F4169C2D1ACE13EC003F9061 /* alien@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alien@2x.png"; sourceTree = "<group>"; };
 		F4169C2E1ACE13EC003F9061 /* shuttle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shuttle@2x.png"; sourceTree = "<group>"; };
 		F4169C2F1ACE13EC003F9061 /* torpedo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "torpedo@2x.png"; sourceTree = "<group>"; };
+		F4169C341ACE1415003F9061 /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
+		F4169C351ACE1415003F9061 /* torpedo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = torpedo.mp3; sourceTree = "<group>"; };
 		F488AFBA1ACC821400A6F730 /* simpleGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = simpleGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F488AFBE1ACC821400A6F730 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F488AFBF1ACC821400A6F730 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +82,15 @@
 			name = sprites.atlas;
 			sourceTree = "<group>";
 		};
+		F4169C331ACE1405003F9061 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				F4169C341ACE1415003F9061 /* bgmusic.mp3 */,
+				F4169C351ACE1415003F9061 /* torpedo.mp3 */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
 		F488AFB11ACC821400A6F730 = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +117,7 @@
 				F488AFC11ACC821400A6F730 /* GameScene.sks */,
 				F488AFC31ACC821400A6F730 /* GameScene.swift */,
 				F488AFC51ACC821400A6F730 /* GameViewController.swift */,
+				F4169C331ACE1405003F9061 /* sounds */,
 				F4169C2C1ACE13C6003F9061 /* sprites.atlas */,
 				F488AFC71ACC821400A6F730 /* Main.storyboard */,
 				F488AFCA1ACC821400A6F730 /* Images.xcassets */,
@@ -221,9 +235,11 @@
 				F4169C311ACE13EC003F9061 /* shuttle@2x.png in Resources */,
 				F4169C301ACE13EC003F9061 /* alien@2x.png in Resources */,
 				F488AFCE1ACC821400A6F730 /* LaunchScreen.xib in Resources */,
+				F4169C361ACE1415003F9061 /* bgmusic.mp3 in Resources */,
 				F4169C321ACE13EC003F9061 /* torpedo@2x.png in Resources */,
 				F488AFCB1ACC821400A6F730 /* Images.xcassets in Resources */,
 				F488AFC21ACC821400A6F730 /* GameScene.sks in Resources */,
+				F4169C371ACE1415003F9061 /* torpedo.mp3 in Resources */,
 				F488AFC91ACC821400A6F730 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
