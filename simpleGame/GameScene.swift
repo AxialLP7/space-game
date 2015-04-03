@@ -20,6 +20,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // counts the number of aliens destroyed
     var aliensDestroyed: Int = 0
     
+    // give it a bitmask using this strange looking code
+    let alienCategory: UInt32 = 0x1 << 1 // creates a bitwise multiplication, we're multiplying 0x1 by 1
+                                         // it will identify our alien when we're doing a collision with the photon Torpedo
+    let photonTorpedoCategory: UInt32 = 0x1 << 0 // all we need to know to determine the differences between the categories
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         /*
@@ -59,17 +64,86 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var alien: SKSpriteNode = SKSpriteNode(imageNamed: "alien")
         
         // give physics body to detect collisions more accurately and simulating collision effects
-        alien.physicsBody = SKPhysicsBody(rectangleOfSize: alien.size) // crude, does this mean every alien is basically a rectangle? 
+        alien.physicsBody = SKPhysicsBody(rectangleOfSize: alien.size)
+        // ^--- crude, does this mean every alien is basically a rectangle?
         alien.physicsBody?.dynamic = true
         
         // now give alien category bitmask and contact bitmask 
         // necessary to detect collision with photon torpedo
+        alien.physicsBody?.categoryBitMask = alienCategory
+        
+        // this something contact with torpedo
+        alien.physicsBody?.contactTestBitMask = photonTorpedoCategory
+        alien.physicsBody?.collisionBitMask = 0
+        
+        // when do we use '!' or '?' ? is it like ruby?
+        
+        // we will now set/give our alien a position which should be set on random on the x-axis (no y-axis)
+        // use very simple approach by creating a constant
+        let minX = alien.size.width/2
+        // use the maximum size of the frame - half width of alien so that the alien is not spawned outside the phone screen
+        let maxX = self.frame.size.width - alien.size.width/2
+        
+        // to create a range of values where our alien can appear on the x-axis
+        let range = maxX - minX
+        
+        // now let's create the randomizer function
+        // going to use in a floating point
+        let position: CGFloat = (CGFloat(arc4random())) % CGFloat(range) + CGFloat(minX)
+        
+        alien.position = CGPointMake(position, self.frame.size.height+alien.size.height)
+        self.addChild(alien)
+        
+        // create movement in our game
+        // define speed and duration of animation
+        // want the aliens to have different speed
+        // use same approach for random x with random speed
+        let minDuration = 2
+        let maxDuration = 4
+        let rangeDuration = maxDuration - minDuration
+        let duration = Int(arc4random()) % Int(rangeDuration) + Int(minDuration)
+        
+        var actionArray: NSMutableArray = NSMutableArray()
+        
+        actionArray.addObject(SKAction.moveTo(CGPointMake(position, -alien.size.height), duration: NSTimeInterval(duration)))
+        
+        actionArray.addObject(SKAction.removeFromParent())
+        
+        alien.runAction(SKAction.sequence(actionArray))
+        
         
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func updateWithTimeSinceLastUpdate(timeSinceLastUpdate: CFTimeInterval) {
+        
+        // add time since last update to yield time property
+        lastYieldTimeInterval += timeSinceLastUpdate
+        
+        if(lastYieldTimeInterval > 1) {
+            lastYieldTimeInterval = 0
+            addAlien()
+        }
+    }
+    
+    override func update(currentTime: CFTimeInterval) {
+        
+        var timeSinceLastUpdate = currentTime - lastUpdateTimerInterval
+        lastUpdateTimerInterval = currentTime
+        
+        // check meaning more than a second has passed
+        if(timeSinceLastUpdate > 1) {
+            timeSinceLastUpdate = 1/60
+            lastUpdateTimerInterval = currentTime
+        }
+        
+        updateWithTimeSinceLastUpdate(timeSinceLastUpdate)
+    }
+    
+    
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
@@ -89,9 +163,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.addChild(sprite)
         }
-    }
-   
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
     }
 }
