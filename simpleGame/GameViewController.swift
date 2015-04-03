@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import AVFoundation
 
 extension SKNode {
     class func unarchiveFromFile(file : NSString) -> SKNode? {
@@ -27,9 +28,12 @@ extension SKNode {
 
 class GameViewController: UIViewController {
 
+    var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+/*
         if let scene = GameScene.unarchiveFromFile("GameScene") as? GameScene {
             // Configure the view.
             let skView = self.view as SKView
@@ -44,8 +48,43 @@ class GameViewController: UIViewController {
             
             skView.presentScene(scene)
         }
+*/
+    }
+    
+    // use for sizing purposes so that we can initialize our game scene 
+        // where all the designing stuff will take place
+    
+    
+    // create music player, need to import AVFoundation
+    // and then create AVAudioPlayer
+    
+    override func viewWillLayoutSubviews() {
+        var bgMusicURL: NSURL = NSBundle.mainBundle().URLForResource("bgmusic", withExtension: "mp3")!
+        backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: bgMusicURL, error: nil)
+        backgroundMusicPlayer.numberOfLoops = -1
+        backgroundMusicPlayer.prepareToPlay()
+        backgroundMusicPlayer.play()
+        
+        // now call scene and show
+        // sprite kit view SKView
+        var skView: SKView = self.view as SKView // casting this for type safety
+        
+        // now show fps and node count label
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        
+        // now let's create the scene
+        // -- this is the scene that we will create in GameScene.swift file
+        var scene: SKScene = GameScene(size: skView.bounds.size)
+        // ^ game scene is initialized with the bounds and size of skView
+        
+        scene.scaleMode = SKSceneScaleMode.AspectFill
+        skView.presentScene(scene)
     }
 
+    
+    
+    
     override func shouldAutorotate() -> Bool {
         return true
     }

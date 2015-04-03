@@ -9,6 +9,16 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    
+    var player:SKSpriteNode = SKSpriteNode()
+    
+    // below two properties decide when to create aliens
+    var lastYieldTimeInterval: NSTimeInterval = NSTimeInterval()
+    var lastUpdateTimerInterval: NSTimeInterval = NSTimeInterval()
+    
+    // counts the number of aliens destroyed
+    var aliensDestroyed: Int = 0
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         let myLabel = SKLabelNode(fontNamed:"Helvetica Neue")
