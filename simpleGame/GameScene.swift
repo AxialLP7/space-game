@@ -8,8 +8,9 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    // this variable is our player
     var player:SKSpriteNode = SKSpriteNode()
     
     // below two properties decide when to create aliens
@@ -21,12 +22,53 @@ class GameScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
+        /*
         let myLabel = SKLabelNode(fontNamed:"Helvetica Neue")
         myLabel.text = "Hello, World!";
         myLabel.fontSize = 65;
         myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         
         self.addChild(myLabel)
+        */
+    }
+    
+    override init(size: CGSize){
+        super.init(size: size)
+        self.backgroundColor = SKColor.blackColor()
+        // should figure out how to add background image instead.
+        // -- how do platform games move through the image? I think that's quite 
+        // interetesting
+        
+        //begin creating player object
+        player = SKSpriteNode(imageNamed: "shuttle")
+        // self.frame.size.width/2 places the image in the middle of the screen
+        player.position = CGPointMake(self.frame.size.width/2, player.size.height/2 + 20)
+            // note that the coordinate system isn't starting at the upper left corner but lower left corner
+        
+        self.addChild(player)
+        
+        // give it gravity of 0 0 so no direction, character stands still
+        self.physicsWorld.gravity = CGVectorMake(0, 0)
+        
+        // used later to detect whether alien hit torpedo shot collide or not
+        self.physicsWorld.contactDelegate = self
+    }
+    
+    // now to create aliens!
+    func addAlien() {
+        var alien: SKSpriteNode = SKSpriteNode(imageNamed: "alien")
+        
+        // give physics body to detect collisions more accurately and simulating collision effects
+        alien.physicsBody = SKPhysicsBody(rectangleOfSize: alien.size) // crude, does this mean every alien is basically a rectangle? 
+        alien.physicsBody?.dynamic = true
+        
+        // now give alien category bitmask and contact bitmask 
+        // necessary to detect collision with photon torpedo
+        
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
